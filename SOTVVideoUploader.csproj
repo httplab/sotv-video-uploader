@@ -55,6 +55,7 @@
     <Compile Include="Category.cs" />
     <Compile Include="CategoryProvider.cs" />
     <Compile Include="ConfigCredentialsProvider.cs" />
+    <Compile Include="FFMpeg.cs" />
     <Compile Include="FFMpegThumbnailGenerator.cs" />
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
@@ -73,17 +74,34 @@
     <Compile Include="IPathGenerator.cs" />
     <Compile Include="IThumbnailGenerator.cs" />
     <Compile Include="IThumbnailPropertiesProvider.cs" />
+    <Compile Include="LongOperation.cs" />
+    <Compile Include="frmLongOperation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLongOperation.Designer.cs">
+      <DependentUpon>frmLongOperation.cs</DependentUpon>
+    </Compile>
     <Compile Include="PathGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="S3Uploader.cs" />
     <Compile Include="Thumbnail.cs" />
+    <Compile Include="ThumbnailAggregator.cs" />
+    <Compile Include="ThumbnailViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ThumbnailViewer.Designer.cs">
+      <DependentUpon>ThumbnailViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="ThumbsSettings.cs" />
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmSettingsDialog.resx">
       <DependentUpon>frmSettingsDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmLongOperation.resx">
+      <DependentUpon>frmLongOperation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -95,6 +113,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="ThumbnailViewer.resx">
+      <DependentUpon>ThumbnailViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -110,6 +131,7 @@
     <Content Include="ffmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\progress_bar.gif" />
     <None Include="Resources\settings_16.png" />
     <None Include="Resources\Webcontrol_Fileupload.bmp" />
     <None Include="Resources\GenVideoDoc_16x16_72.png" />

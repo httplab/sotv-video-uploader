@@ -74,6 +74,13 @@ namespace SOTVVideoUploader.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap progress_bar {
+            get {
+                object obj = ResourceManager.GetObject("progress_bar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap settings_16 {
             get {
                 object obj = ResourceManager.GetObject("settings_16", resourceCulture);

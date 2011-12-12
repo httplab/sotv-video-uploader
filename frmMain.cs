@@ -12,11 +12,15 @@ namespace SOTVVideoUploader
 {
     public partial class frmMain : Form
     {
+        private const string _title = "SOTVVideoUploader";
         private string _filename;
         private bool _fileLoaded = false;
         private bool _serverAccessible = false;
         private S3Uploader _uploader = new S3Uploader(new ConfigCredentialsProvider());
         private IThumbnailGenerator _thumbGenerator = new FFMpegThumbnailGenerator();
+        private IEnumerable<Thumbnail> _newThumbs;
+        private List<Thumbnail> _thumbs;
+        private Thumbnail _mainThumb;
        
         public frmMain()
         {
@@ -43,12 +47,10 @@ namespace SOTVVideoUploader
             if(_fileLoaded)
             {
                 lblFilename.Text = _filename;
+                Text = String.Format("{0} - {1}", _title, Path.GetFileName(_filename));
             }
             
-            lblFilename.Visible = _fileLoaded;
-            mplayer.Visible = _fileLoaded;
-            lblCategories.Visible = _fileLoaded;
-            cmbCategories.Visible = _fileLoaded;
+            
             btnGenerateThumbnails.Enabled = tsmiGenerateThumbs.Enabled = _fileLoaded;
             btnUpload.Enabled = tsmiUpload.Enabled = _serverAccessible && _fileLoaded;
         }
@@ -123,16 +125,29 @@ namespace SOTVVideoUploader
 
         public void Upload()
         {
-            IPathGenerator _generator = new PathGenerator();
-            var fileName = Path.GetFileName(_filename);
+            
             mplayer.URL = "";
             mplayer.close();
-            _uploader.Upload(_filename, _generator.GetPath(SelectedCategory, fileName));
+            LongOperationProcessor.PerformLongOperation(UploadOperation, "Загрузка файлов на сервер.",SelectedCategory);
         }
 
         private void btnUpload_Click(object sender, EventArgs e)
         {
             Upload();
+        }
+
+        private void UploadOperation(params object[] args)
+        {
+            IPathGenerator _generator = new PathGenerator();
+            var fileName = Path.GetFileName(_filename);
+            _uploader.Upload(_filename, _generator.GetPath(args[0] as ICategory, fileName));
+            var img = ThumbnailAggregator.Join(_thumbs.Where(t => t.IsChecked));
+            var stream = new MemoryStream();
+            img.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+
+            var smallThumbsFilename = fileName + ".small.jpg";
+
+            _uploader.Upload(stream, _generator.GetPath(args[0] as ICategory, smallThumbsFilename));
         }
 
         private void btnGenerateThumbnails_Click(object sender, EventArgs e)
@@ -142,19 +157,67 @@ namespace SOTVVideoUploader
 
         private void GenerateThumbs()
         {
-            var thumbs = _thumbGenerator.GetThumbnails(_filename, new ThumbsSettings());
-            int i=0;
-            foreach (var thumb in thumbs)
-            {
-                var pb = new PictureBox();
-                pb.Width = 100;
-                pb.SizeMode = PictureBoxSizeMode.Zoom;
-                pb.ImageLocation = thumb.LargeThumbPath;
-                pb.Left = i* 110;
+            
+            LongOperationProcessor.PerformLongOperation(GenerateThumbsOperation, "Идет генерация скриншотов");
+            _thumbs = _newThumbs.ToList();
+            UpdateThumbsPanel();
+        }
 
-                splitContainer1.Panel2.Controls.Add(pb);
-                i++;
+        private void GenerateThumbsOperation(params object[] args)
+        {
+            _newThumbs = _thumbGenerator.GetThumbnails(_filename, new ThumbsSettings());
+        }
+
+        private void lblCategories_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCaptureNow_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void UpdateThumbsPanel()
+        {
+            flThumbs.SuspendLayout();
+            flThumbs.Controls.Clear();
+
+            foreach (var thumb in _thumbs.OrderBy(t => t.Position))
+            {
+                ThumbnailViewer tv = new ThumbnailViewer(thumb);
+                tv.Width = thumb.Small.Width + 6;
+                tv.Height = thumb.Small.Height + 20;
+                tv.CheckedChanged += new EventHandler(tv_CheckedChanged);
+                flThumbs.Controls.Add(tv);
+                
             }
+
+            flThumbs.ResumeLayout();
+            UpdateThumbsStatus();
+        }
+
+        void tv_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateThumbsStatus();
+        }
+
+        void UpdateThumbsStatus()
+        {
+            lblThumbsCount.Text =
+                String.Format("Выбрано {0} скриншотов из {1}", _thumbs.Where(t => t.IsChecked).Count(), _thumbs.Count);
+        }
+
+        private void pictureBox1_DragDrop(object sender, DragEventArgs e)
+        {
+            var thumb = e.Data.GetData(typeof(Thumbnail)) as Thumbnail;
+            _mainThumb = thumb;
+            pictureBox1.Image = _mainThumb.Large;
         }
     }
 }

@@ -10,32 +10,31 @@ namespace SOTVVideoUploader
 {
     public class FFMpegThumbnailGenerator : IThumbnailGenerator
     {
-        string _pathToffmpegExecutable = "ffmpeg.exe";
-        
-
         #region IThumbnailGenerator Members
 
         public IEnumerable<Thumbnail> GetThumbnails(string filename, IThumbnailPropertiesProvider properties)
         {
             var tempPath = Path.GetTempPath();
-            ProcessStartInfo psi = new ProcessStartInfo(_pathToffmpegExecutable);
             
-            psi.CreateNoWindow = true;
-            psi.WindowStyle = ProcessWindowStyle.Hidden;
-            //psi.WorkingDirectory = tempPath;
-
             List<Thumbnail> res = new List<Thumbnail>();
+            Random r= new Random();
+            FFMpeg ffmpeg = new FFMpeg();
 
-            for (int i = 1; i < properties.Count; i++)
+            for (int i = 0; i < properties.Count; i++)
             {
-                string ofTemplate = Path.Combine(tempPath,String.Format("output{0}%d.jpg", i));
-                string ofFile = Path.Combine(tempPath,String.Format("output{0}1.jpg", i));
-                psi.Arguments = GetArgs(filename, properties.CaptureStartTime, properties.LargeThumbSize, ofTemplate);
-                Process pr = new Process();
-                pr.StartInfo = psi;
-                pr.Start();
-                res.Add( new Thumbnail() { LargeThumbPath = Path.Combine(tempPath, ofFile)});
-                while (!pr.HasExited) ;
+                
+                TimeSpan span = new TimeSpan(0, 0, 0, properties.CaptureStartTime, r.Next(0, 60000));
+                //var large = ffmpeg.TakeScreenshot(filename, span, properties.LargeThumbSize);
+                var small = ffmpeg.TakeScreenshot(filename, span, properties.SmallThumbSize);
+                Thumbnail thumb = new Thumbnail()
+                {
+                    //Large = large,
+                    Small = small,
+                    Position = span,
+                    IsChecked = true,
+                };
+
+                res.Add(thumb);
             }
 
             return res;

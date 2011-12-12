@@ -30,6 +30,30 @@ namespace SOTVVideoUploader
             
         }
 
+
+        public void Upload(Stream data, string path)
+        {
+            try
+            {
+                var request = new Amazon.S3.Model.PutObjectRequest()
+                {
+                    BucketName = _bucketName,
+                    Key = path,
+                    InputStream = data,
+                };
+                request.AddHeader("x-amz-acl", "public-read");
+                _client.PutObject(request);
+            }
+            catch
+            {
+                throw new ApplicationException("Не удалось загрузить файл на сервер.");
+            }
+            finally
+            {
+
+            }
+        }
+
         public void Upload(string filename, string path)
         {
             try
@@ -41,7 +65,7 @@ namespace SOTVVideoUploader
                     FilePath = filename, 
                 };
                 request.AddHeader("x-amz-acl", "public-read");
-                _client.BeginPutObject(request, Callback, null);
+                _client.PutObject(request);
             }
             catch
             {
@@ -53,21 +77,21 @@ namespace SOTVVideoUploader
             }
         }
 
-        private void Callback(IAsyncResult result)
-        {
-            try
-            {
-                _client.EndPutObject(result);
-                MessageBox.Show("Success");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
+        //private void Callback(IAsyncResult result)
+        //{
+        //    try
+        //    {
+        //        _client.EndPutObject(result);
+        //        MessageBox.Show("Success");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex.Message);
+        //    }
+        //    finally
+        //    {
                 
-            }
-        }
+        //    }
+        //}
     }
 }
