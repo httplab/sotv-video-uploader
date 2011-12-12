@@ -38,7 +38,7 @@ namespace SOTVVideoUploader
             {
                 _thumbnail = value;
                 pbMain.Image = _thumbnail.Small;
-                chbMain.Text = String.Format("{0:00}:{1:00}:{2:00}", _thumbnail.Position.Hours, _thumbnail.Position.Minutes, _thumbnail.Position.Seconds);
+                chbMain.Text = _thumbnail.Time;
                 chbMain.Checked = _thumbnail.IsChecked;
             }
         }
@@ -65,6 +65,11 @@ namespace SOTVVideoUploader
             {
                 CheckedChanged(this, new EventArgs());
             }
+        }
+
+        private void pbMain_MouseDown(object sender, MouseEventArgs e)
+        {
+            OnMouseDown(e);
         }
     }
 }

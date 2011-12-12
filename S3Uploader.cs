@@ -40,13 +40,14 @@ namespace SOTVVideoUploader
                     BucketName = _bucketName,
                     Key = path,
                     InputStream = data,
+                    Timeout = 3600000
                 };
                 request.AddHeader("x-amz-acl", "public-read");
                 _client.PutObject(request);
             }
-            catch
+            catch (Exception ex)
             {
-                throw new ApplicationException("Не удалось загрузить файл на сервер.");
+                throw new ApplicationException("Не удалось загрузить файл на сервер.", ex);
             }
             finally
             {
@@ -62,14 +63,15 @@ namespace SOTVVideoUploader
                 {
                     BucketName = _bucketName,
                     Key = path,
-                    FilePath = filename, 
+                    FilePath = filename,
+                    Timeout = 3600000
                 };
                 request.AddHeader("x-amz-acl", "public-read");
                 _client.PutObject(request);
             }
-            catch
+            catch (Exception ex)
             {
-                throw new ApplicationException("Не удалось загрузить файл на сервер.");
+                throw new ApplicationException("Не удалось загрузить файл на сервер.", ex);
             }
             finally
             {

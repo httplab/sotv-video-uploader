@@ -40,11 +40,32 @@ namespace SOTVVideoUploader
             return res;
         }
 
+        public void GetMainThumb(string filename, Thumbnail thumb, IThumbnailPropertiesProvider properties)
+        {
+            FFMpeg ffmpeg = new FFMpeg();
+            thumb.Large = ffmpeg.TakeScreenshot(filename, thumb.Position, properties.LargeThumbSize);
+        }
+
         #endregion
 
-        private string GetArgs(string input, int startSectond, Size resolution, string output)
+
+
+        #region IThumbnailGenerator Members
+
+
+        public Thumbnail GetThumbnailAt(string filename, TimeSpan position, IThumbnailPropertiesProvider properties)
         {
-            return String.Format("-i \"{0}\" -ss {1} -s {2}x{3} -vframes 1 {4}", input, startSectond, resolution.Width, resolution.Height, output);
+            FFMpeg ffmpeg = new FFMpeg();
+
+
+            var res = new Thumbnail();
+            res.Small  = ffmpeg.TakeScreenshot(filename, position, properties.SmallThumbSize);
+            res.Position = position;
+            res.IsChecked = true;
+            return res;
+
         }
+
+        #endregion
     }
 }

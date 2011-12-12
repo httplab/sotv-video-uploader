@@ -33,6 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>windows_256.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AWSSDK, Version=1.3.18.0, Culture=neutral, PublicKeyToken=cd2d24cd2bace800, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -131,6 +134,11 @@
     <Content Include="ffmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="windows_256.ico" />
+    <None Include="Resources\windows_256.ico" />
+    <None Include="Resources\icoMain.ico" />
+    <None Include="Resources\XSDSchema_ClearWorkspaceCmd.bmp" />
+    <None Include="Resources\Delete.bmp" />
     <None Include="Resources\progress_bar.gif" />
     <None Include="Resources\settings_16.png" />
     <None Include="Resources\Webcontrol_Fileupload.bmp" />

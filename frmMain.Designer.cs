@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -38,7 +39,9 @@
             this.tsmiUpload = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiAppSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.lblThumbsCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnFileOpen = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -53,14 +56,18 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.lblFilename = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtUploadName = new System.Windows.Forms.TextBox();
             this.btnCaptureNow = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblUploadName = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.pbMainThumb = new System.Windows.Forms.PictureBox();
+            this.lblMainTime = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.flThumbs = new System.Windows.Forms.FlowLayoutPanel();
-            this.lblThumbsCount = new System.Windows.Forms.ToolStripStatusLabel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.cmsThumbnails = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.удалитьНеотмеченныеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.очиститьВсеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -68,8 +75,10 @@
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbMainThumb)).BeginInit();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.cmsThumbnails.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -77,7 +86,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.файлToolStripMenuItem,
             this.инструментыToolStripMenuItem,
-            this.настройкиToolStripMenuItem});
+            this.настройкиToolStripMenuItem,
+            this.справкаToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(702, 24);
@@ -128,6 +138,7 @@
             this.tsmiGenerateThumbs.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
             this.tsmiGenerateThumbs.Size = new System.Drawing.Size(266, 22);
             this.tsmiGenerateThumbs.Text = "Сгенерировать скриншоты";
+            this.tsmiGenerateThumbs.Click += new System.EventHandler(this.tsmiGenerateThumbs_Click);
             // 
             // tsmiUpload
             // 
@@ -138,6 +149,7 @@
             this.tsmiUpload.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
             this.tsmiUpload.Size = new System.Drawing.Size(266, 22);
             this.tsmiUpload.Text = "Загрузить на сервер";
+            this.tsmiUpload.Click += new System.EventHandler(this.tsmiUpload_Click);
             // 
             // настройкиToolStripMenuItem
             // 
@@ -155,6 +167,12 @@
             this.tsmiAppSettings.Text = "Настройки приложения";
             this.tsmiAppSettings.Click += new System.EventHandler(this.tsmiAppSettings_Click);
             // 
+            // справкаToolStripMenuItem
+            // 
+            this.справкаToolStripMenuItem.Name = "справкаToolStripMenuItem";
+            this.справкаToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
+            this.справкаToolStripMenuItem.Text = "Справка";
+            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -165,6 +183,11 @@
             this.statusStrip1.Size = new System.Drawing.Size(702, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // lblThumbsCount
+            // 
+            this.lblThumbsCount.Name = "lblThumbsCount";
+            this.lblThumbsCount.Size = new System.Drawing.Size(0, 17);
             // 
             // toolStrip1
             // 
@@ -277,6 +300,7 @@
             // 
             // tableLayoutPanel1
             // 
+            this.tableLayoutPanel1.AllowDrop = true;
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -299,38 +323,42 @@
             // 
             // lblFilename
             // 
+            this.lblFilename.AllowDrop = true;
             this.lblFilename.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblFilename.AutoSize = true;
             this.lblFilename.Location = new System.Drawing.Point(20, 6);
             this.lblFilename.Margin = new System.Windows.Forms.Padding(20, 0, 3, 0);
             this.lblFilename.Name = "lblFilename";
-            this.lblFilename.Size = new System.Drawing.Size(36, 13);
+            this.lblFilename.Size = new System.Drawing.Size(0, 13);
             this.lblFilename.TabIndex = 6;
-            this.lblFilename.Text = "Файл";
-            this.lblFilename.Visible = false;
+            this.lblFilename.DragDrop += new System.Windows.Forms.DragEventHandler(this.frmMain_DragDrop);
+            this.lblFilename.DragEnter += new System.Windows.Forms.DragEventHandler(this.frmMain_DragEnter);
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.textBox1);
+            this.panel1.AllowDrop = true;
+            this.panel1.Controls.Add(this.txtUploadName);
             this.panel1.Controls.Add(this.btnCaptureNow);
             this.panel1.Controls.Add(this.cmbCategories);
-            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.lblUploadName);
             this.panel1.Controls.Add(this.lblCategories);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 212);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(345, 179);
             this.panel1.TabIndex = 8;
+            this.panel1.DragDrop += new System.Windows.Forms.DragEventHandler(this.frmMain_DragDrop);
+            this.panel1.DragEnter += new System.Windows.Forms.DragEventHandler(this.frmMain_DragEnter);
             // 
-            // textBox1
+            // txtUploadName
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.txtUploadName.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(17, 110);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(311, 20);
-            this.textBox1.TabIndex = 7;
+            this.txtUploadName.Location = new System.Drawing.Point(17, 110);
+            this.txtUploadName.Name = "txtUploadName";
+            this.txtUploadName.Size = new System.Drawing.Size(311, 20);
+            this.txtUploadName.TabIndex = 7;
             // 
             // btnCaptureNow
             // 
@@ -346,21 +374,21 @@
             this.btnCaptureNow.UseVisualStyleBackColor = true;
             this.btnCaptureNow.Click += new System.EventHandler(this.btnCaptureNow_Click);
             // 
-            // label1
+            // lblUploadName
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lblUploadName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 94);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(124, 13);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "Имя файла на сервере";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.lblUploadName.AutoSize = true;
+            this.lblUploadName.Location = new System.Drawing.Point(14, 94);
+            this.lblUploadName.Name = "lblUploadName";
+            this.lblUploadName.Size = new System.Drawing.Size(124, 13);
+            this.lblUploadName.TabIndex = 6;
+            this.lblUploadName.Text = "Имя файла на сервере";
+            this.lblUploadName.Click += new System.EventHandler(this.label1_Click);
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.pictureBox1);
+            this.groupBox1.Controls.Add(this.tableLayoutPanel2);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(354, 28);
             this.groupBox1.Name = "groupBox1";
@@ -369,6 +397,43 @@
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Основной скриншот";
+            this.groupBox1.DragDrop += new System.Windows.Forms.DragEventHandler(this.groupBox1_DragDrop);
+            this.groupBox1.DragEnter += new System.Windows.Forms.DragEventHandler(this.groupBox1_DragEnter);
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 1;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.Controls.Add(this.pbMainThumb, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.lblMainTime, 0, 1);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(10, 23);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 2;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(325, 145);
+            this.tableLayoutPanel2.TabIndex = 0;
+            // 
+            // pbMainThumb
+            // 
+            this.pbMainThumb.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pbMainThumb.Location = new System.Drawing.Point(3, 3);
+            this.pbMainThumb.Name = "pbMainThumb";
+            this.pbMainThumb.Size = new System.Drawing.Size(319, 114);
+            this.pbMainThumb.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbMainThumb.TabIndex = 0;
+            this.pbMainThumb.TabStop = false;
+            // 
+            // lblMainTime
+            // 
+            this.lblMainTime.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lblMainTime.AutoSize = true;
+            this.lblMainTime.Location = new System.Drawing.Point(162, 126);
+            this.lblMainTime.Name = "lblMainTime";
+            this.lblMainTime.Size = new System.Drawing.Size(0, 13);
+            this.lblMainTime.TabIndex = 1;
             // 
             // groupBox2
             // 
@@ -384,40 +449,55 @@
             // flThumbs
             // 
             this.flThumbs.AutoScroll = true;
+            this.flThumbs.ContextMenuStrip = this.cmsThumbnails;
             this.flThumbs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flThumbs.Location = new System.Drawing.Point(3, 16);
             this.flThumbs.Name = "flThumbs";
             this.flThumbs.Size = new System.Drawing.Size(339, 160);
             this.flThumbs.TabIndex = 0;
             // 
-            // lblThumbsCount
+            // cmsThumbnails
             // 
-            this.lblThumbsCount.Name = "lblThumbsCount";
-            this.lblThumbsCount.Size = new System.Drawing.Size(0, 17);
+            this.cmsThumbnails.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.удалитьНеотмеченныеToolStripMenuItem,
+            this.очиститьВсеToolStripMenuItem});
+            this.cmsThumbnails.Name = "cmsThumbnails";
+            this.cmsThumbnails.Size = new System.Drawing.Size(204, 48);
             // 
-            // pictureBox1
+            // удалитьНеотмеченныеToolStripMenuItem
             // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(10, 23);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(325, 145);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.DragDrop += new System.Windows.Forms.DragEventHandler(this.pictureBox1_DragDrop);
+            this.удалитьНеотмеченныеToolStripMenuItem.Image = global::SOTVVideoUploader.Properties.Resources.Delete;
+            this.удалитьНеотмеченныеToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.удалитьНеотмеченныеToolStripMenuItem.Name = "удалитьНеотмеченныеToolStripMenuItem";
+            this.удалитьНеотмеченныеToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.удалитьНеотмеченныеToolStripMenuItem.Text = "Удалить неотмеченные";
+            this.удалитьНеотмеченныеToolStripMenuItem.Click += new System.EventHandler(this.удалитьНеотмеченныеToolStripMenuItem_Click);
+            // 
+            // очиститьВсеToolStripMenuItem
+            // 
+            this.очиститьВсеToolStripMenuItem.Image = global::SOTVVideoUploader.Properties.Resources.XSDSchema_ClearWorkspaceCmd;
+            this.очиститьВсеToolStripMenuItem.Name = "очиститьВсеToolStripMenuItem";
+            this.очиститьВсеToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.очиститьВсеToolStripMenuItem.Text = "Очистить все";
+            this.очиститьВсеToolStripMenuItem.Click += new System.EventHandler(this.очиститьВсеToolStripMenuItem_Click);
             // 
             // frmMain
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(702, 465);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "frmMain";
             this.Text = "SOTVVideoUploader";
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.frmMain_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.frmMain_DragEnter);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -430,8 +510,11 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbMainThumb)).EndInit();
             this.groupBox2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.cmsThumbnails.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -463,14 +546,20 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label lblFilename;
         private System.Windows.Forms.Button btnCaptureNow;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txtUploadName;
+        private System.Windows.Forms.Label lblUploadName;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.FlowLayoutPanel flThumbs;
         private System.Windows.Forms.ToolStripStatusLabel lblThumbsCount;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pbMainThumb;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.Label lblMainTime;
+        private System.Windows.Forms.ContextMenuStrip cmsThumbnails;
+        private System.Windows.Forms.ToolStripMenuItem удалитьНеотмеченныеToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem очиститьВсеToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem справкаToolStripMenuItem;
     }
 }
 

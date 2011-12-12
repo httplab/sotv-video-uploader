@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SOTVVideoUploader")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Клиент для загрузки видео в AmazonS3")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("httplab")]
 [assembly: AssemblyProduct("SOTVVideoUploader")]
 [assembly: AssemblyCopyright("Copyright ©  2011")]
 [assembly: AssemblyTrademark("")]

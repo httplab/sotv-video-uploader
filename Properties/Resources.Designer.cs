@@ -60,6 +60,13 @@ namespace SOTVVideoUploader.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Delete {
+            get {
+                object obj = ResourceManager.GetObject("Delete", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap GenVideoDoc_16x16_72 {
             get {
                 object obj = ResourceManager.GetObject("GenVideoDoc_16x16_72", resourceCulture);
@@ -91,6 +98,20 @@ namespace SOTVVideoUploader.Properties {
         internal static System.Drawing.Bitmap Webcontrol_Fileupload {
             get {
                 object obj = ResourceManager.GetObject("Webcontrol_Fileupload", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Icon windows_256 {
+            get {
+                object obj = ResourceManager.GetObject("windows_256", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap XSDSchema_ClearWorkspaceCmd {
+            get {
+                object obj = ResourceManager.GetObject("XSDSchema_ClearWorkspaceCmd", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
