@@ -102,13 +102,6 @@ namespace SOTVVideoUploader.Properties {
             }
         }
         
-        internal static System.Drawing.Icon windows_256 {
-            get {
-                object obj = ResourceManager.GetObject("windows_256", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap XSDSchema_ClearWorkspaceCmd {
             get {
                 object obj = ResourceManager.GetObject("XSDSchema_ClearWorkspaceCmd", resourceCulture);

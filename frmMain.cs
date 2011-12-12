@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Drawing.Imaging;
 using Encoder = System.Drawing.Imaging.Encoder;
+using System.Configuration;
 
 namespace SOTVVideoUploader
 {
@@ -200,9 +201,17 @@ namespace SOTVVideoUploader
                 }
 
 
+                long quality = 80;
+
+                if (!long.TryParse(ConfigurationManager.AppSettings["jpegQuality"], out quality))
+                {
+                    quality = 80;
+                }
+
+
                 var encoder = Encoder.Quality;
                 var encParams = new EncoderParameters(1);
-                var encParam = new EncoderParameter(encoder, 80L);
+                var encParam = new EncoderParameter(encoder, quality);
                 encParams.Param[0] = encParam;
                 var jpegEncoder = GetEncoder(ImageFormat.Jpeg);
 
@@ -304,8 +313,8 @@ namespace SOTVVideoUploader
             foreach (var thumb in _thumbs.OrderBy(t => t.Position))
             {
                 ThumbnailViewer tv = new ThumbnailViewer(thumb);
-                tv.Width = 200;
-                tv.Height = 170;
+                tv.Width = 180;
+                tv.Height = 110;
                 tv.CheckedChanged += new EventHandler(tv_CheckedChanged);
                 tv.MouseDown += new MouseEventHandler(tv_MouseDown);
                 flThumbs.Controls.Add(tv);
@@ -313,6 +322,7 @@ namespace SOTVVideoUploader
             }
 
             flThumbs.ResumeLayout();
+            flThumbs.PerformLayout();
             UpdateThumbsStatus();
         }
 

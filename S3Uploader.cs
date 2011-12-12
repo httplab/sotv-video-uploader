@@ -10,12 +10,18 @@ using System.Windows.Forms;
 
 namespace SOTVVideoUploader
 {
+    /// <summary>
+    /// Класс для загрузки данных в S3
+    /// </summary>
     public class S3Uploader
     {
-        private AWSCredentials _credentials;
         private string _bucketName;
         private AmazonS3Client _client;
 
+        /// <summary>
+        /// Создает новый экземпляр класса S3Uploader
+        /// </summary>
+        /// <param name="credntialsProvider">Провайдер реквизитов для подключения</param>
         public S3Uploader(ICredentialsProvider credntialsProvider)
         {
             AmazonS3Config config = new
@@ -30,7 +36,11 @@ namespace SOTVVideoUploader
             
         }
 
-
+        /// <summary>
+        /// Загружает данные из потока на сервер
+        /// </summary>
+        /// <param name="data">Поток данных</param>
+        /// <param name="path">Путь к файлу на сервере</param>
         public void Upload(Stream data, string path)
         {
             try
@@ -55,6 +65,11 @@ namespace SOTVVideoUploader
             }
         }
 
+        /// <summary>
+        /// Загружает файл на сервер
+        /// </summary>
+        /// <param name="filename">Путь к файлу на диске</param>
+        /// <param name="path">Путь к файлу на сервере</param>
         public void Upload(string filename, string path)
         {
             try
@@ -78,22 +93,5 @@ namespace SOTVVideoUploader
                 
             }
         }
-
-        //private void Callback(IAsyncResult result)
-        //{
-        //    try
-        //    {
-        //        _client.EndPutObject(result);
-        //        MessageBox.Show("Success");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show(ex.Message);
-        //    }
-        //    finally
-        //    {
-                
-        //    }
-        //}
     }
 }

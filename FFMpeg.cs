@@ -10,6 +10,9 @@ using Image = System.Drawing.Image;
 
 namespace SOTVVideoUploader
 {
+    /// <summary>
+    /// Обертка для ffmpeg
+    /// </summary>
     public class FFMpeg
     {
         private string _pathToffmpegExecutable = "ffmpeg";
@@ -28,6 +31,13 @@ namespace SOTVVideoUploader
                 while (!pr.HasExited) ;
         }
 
+        /// <summary>
+        /// Делает скриншот из указанного файла
+        /// </summary>
+        /// <param name="filename">Путь к видеофайлу</param>
+        /// <param name="position">Время скриншота</param>
+        /// <param name="resolution">Разрешение скринщота</param>
+        /// <returns>Изображение со скриншотом</returns>
         public Image TakeScreenshot(string filename, TimeSpan position, Size resolution)
         {
             var output = Path.GetTempFileName();

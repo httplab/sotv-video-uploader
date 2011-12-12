@@ -135,8 +135,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="windows_256.ico" />
-    <None Include="Resources\windows_256.ico" />
-    <None Include="Resources\icoMain.ico" />
     <None Include="Resources\XSDSchema_ClearWorkspaceCmd.bmp" />
     <None Include="Resources\Delete.bmp" />
     <None Include="Resources\progress_bar.gif" />
