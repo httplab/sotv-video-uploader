@@ -7,6 +7,7 @@ using Amazon.S3;
 using System.Configuration;
 using System.IO;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace SOTVVideoUploader
 {
@@ -62,6 +63,10 @@ namespace SOTVVideoUploader
                 request.AddHeader("x-amz-acl", "public-read");
                 _client.PutObject(request);
             }
+            catch (ThreadAbortException tae)
+            {
+
+            }
             catch (Exception ex)
             {
                 throw new ApplicationException("Не удалось загрузить файл на сервер.", ex);
@@ -90,6 +95,10 @@ namespace SOTVVideoUploader
                 };
                 request.AddHeader("x-amz-acl", "public-read");
                 _client.PutObject(request);
+            }
+            catch (ThreadAbortException tae)
+            {
+
             }
             catch (Exception ex)
             {

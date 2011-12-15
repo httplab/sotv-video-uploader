@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncTask.cs" />
     <Compile Include="Category.cs" />
     <Compile Include="CategoryProvider.cs" />
     <Compile Include="ConfigCredentialsProvider.cs" />
@@ -72,12 +73,17 @@
     <Compile Include="frmSettingsDialog.Designer.cs">
       <DependentUpon>frmSettingsDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmUploadResult.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUploadResult.Designer.cs">
+      <DependentUpon>frmUploadResult.cs</DependentUpon>
+    </Compile>
     <Compile Include="ICategory.cs" />
     <Compile Include="ICredentialsProvider.cs" />
     <Compile Include="IPathGenerator.cs" />
     <Compile Include="IThumbnailGenerator.cs" />
     <Compile Include="IThumbnailPropertiesProvider.cs" />
-    <Compile Include="LongOperation.cs" />
     <Compile Include="frmLongOperation.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -105,6 +111,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmLongOperation.resx">
       <DependentUpon>frmLongOperation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmUploadResult.resx">
+      <DependentUpon>frmUploadResult.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

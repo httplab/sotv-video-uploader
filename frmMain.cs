@@ -10,6 +10,7 @@ using System.IO;
 using System.Drawing.Imaging;
 using Encoder = System.Drawing.Imaging.Encoder;
 using System.Configuration;
+using System.Threading;
 
 namespace SOTVVideoUploader
 {
@@ -22,7 +23,7 @@ namespace SOTVVideoUploader
         private S3Uploader _uploader = new S3Uploader(new ConfigCredentialsProvider());
         private IThumbnailGenerator _thumbGenerator = new FFMpegThumbnailGenerator();
         private IEnumerable<Thumbnail> _newThumbs;
-        private List<Thumbnail> _thumbs;
+        private List<Thumbnail> _thumbs=new List<Thumbnail>();
         private Thumbnail _mainThumb;
        
         public frmMain()
@@ -162,7 +163,30 @@ namespace SOTVVideoUploader
 
             mplayer.URL = "";
             mplayer.close();
-            LongOperationProcessor.PerformLongOperation(UploadOperation, "Загрузка файлов на сервер.",SelectedCategory);
+
+            string url;
+            Exception ex;
+            bool cancel;
+
+            frmLongOperation.PerformAsync<string>(UploadOperation, "Загрузка файлов на сервер", out url, out cancel, out ex, SelectedCategory);
+
+            if (cancel)
+            {
+                MessageBox.Show("Операция прервана пользователем.", "Загрузка файлов на сервер", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (ex != null)
+            {
+                MessageBox.Show("При загрузке файлов на сервер произошла ошибка.\r\n" + ex.Message, "Загрузка файлов на сервер", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            var frm = new frmUploadResult();
+            frm.URL = url;
+            frm.ShowDialog();
+
+            //LongOperationProcessor.PerformLongOperation(UploadOperation, "Загрузка файлов на сервер.",SelectedCategory);
         }
 
         private void btnUpload_Click(object sender, EventArgs e)
@@ -189,10 +213,9 @@ namespace SOTVVideoUploader
             }
         }
 
-        private void UploadOperation(params object[] args)
+        private string UploadOperation(params object[] args)
         {
-            try
-            {
+           
                 IPathGenerator _generator = new PathGenerator();
                 var fileName = Path.GetFileName(_filename);
                 if (!String.IsNullOrWhiteSpace(txtUploadName.Text))
@@ -215,7 +238,9 @@ namespace SOTVVideoUploader
                 encParams.Param[0] = encParam;
                 var jpegEncoder = GetEncoder(ImageFormat.Jpeg);
 
-                _uploader.Upload(_filename, _generator.GetPath(args[0] as ICategory, fileName));
+                var pathInBucket = _generator.GetPath(args[0] as ICategory, fileName);
+
+                _uploader.Upload(_filename, pathInBucket);
 
 
                 if (_thumbs.Any(t => t.IsChecked))
@@ -236,11 +261,10 @@ namespace SOTVVideoUploader
                     _mainThumb.Large.Save(stream, jpegEncoder, encParams);
                     _uploader.Upload(stream, _generator.GetPath(args[0] as ICategory, mainThumbFilename));
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(String.Format("При попытке загрузки файлов на сервер произошла ошибка.\r\n{0}",ex.Message), "Загрузка файлов", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+
+                return ConfigurationManager.AppSettings["urlPrefix"] + pathInBucket;
+            
+          
         }
 
         private void btnGenerateThumbnails_Click(object sender, EventArgs e)
@@ -265,7 +289,28 @@ namespace SOTVVideoUploader
 
         private void GenerateThumbs()
         {
-            LongOperationProcessor.PerformLongOperation(GenerateThumbsOperation, "Создание скриншотов");
+            //LongOperationProcessor.PerformLongOperation(GenerateThumbsOperation, "Создание скриншотов");
+
+            object result;
+            Exception ex;
+            bool cancel;
+
+            frmLongOperation.PerformAsync<object>(GenerateThumbsOperation, "Создание скриншотов", out result, out cancel, out ex);
+
+            if (cancel)
+            {
+                MessageBox.Show("Операция прервана пользователем.", "Создание скриншотов", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (ex != null)
+            {
+                MessageBox.Show("При генерации скриншотов произошла ошибка.\r\n"+ex.Message, "Создание скриншотов", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+           
+
 
             if (_thumbs == null)
             {
@@ -289,9 +334,18 @@ namespace SOTVVideoUploader
             UpdateThumbsPanel();
         }
 
-        private void GenerateThumbsOperation(params object[] args)
+        private object GenerateThumbsOperation(params object[] args)
         {
-            _newThumbs = _thumbGenerator.GetThumbnails(_filename, new ThumbsSettings());
+            var mediaLength = (int) Math.Floor(mplayer.currentMedia.duration * 1000);
+            var checkedCount = _thumbs.Where(t => t.IsChecked).Count();
+
+            var thumbsSettings = new ThumbsSettings();
+
+            if (checkedCount >= thumbsSettings.Count)
+                return null;
+
+            _newThumbs = _thumbGenerator.GetThumbnails(_filename,thumbsSettings , thumbsSettings.Count-checkedCount, (int) mediaLength);
+            return null;
         }
 
         private void lblCategories_Click(object sender, EventArgs e)
@@ -306,6 +360,9 @@ namespace SOTVVideoUploader
 
         private void btnCaptureNow_Click(object sender, EventArgs e)
         {
+            
+
+
             double cpos = mplayer.Ctlcontrols.currentPosition;
             int milliseconds = (int) Math.Round((cpos) * 1000);
             var currentPosition = new TimeSpan(0, 0, 0, 0, milliseconds);
@@ -421,6 +478,21 @@ namespace SOTVVideoUploader
         private void tsmiUpload_Click(object sender, EventArgs e)
         {
             Upload();
+        }
+
+        private void tableLayoutPanel4_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel3_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

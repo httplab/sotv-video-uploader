@@ -12,18 +12,22 @@ namespace SOTVVideoUploader
     {
         #region IThumbnailGenerator Members
 
-        public IEnumerable<Thumbnail> GetThumbnails(string filename, IThumbnailPropertiesProvider properties)
+        public IEnumerable<Thumbnail> GetThumbnails(string filename, IThumbnailPropertiesProvider properties,int count, int mediaLengthms)
         {
             var tempPath = Path.GetTempPath();
             
             List<Thumbnail> res = new List<Thumbnail>();
             Random r= new Random();
             FFMpeg ffmpeg = new FFMpeg();
+            var maxms = mediaLengthms - properties.CaptureStartTime * 1000;
 
-            for (int i = 0; i < properties.Count; i++)
+
+            for (int i = 0; i < count; i++)
             {
                 
-                TimeSpan span = new TimeSpan(0, 0, 0, properties.CaptureStartTime, r.Next(0, 60000));
+
+
+                TimeSpan span = new TimeSpan(0, 0, 0, properties.CaptureStartTime, r.Next(0, maxms));
                 //var large = ffmpeg.TakeScreenshot(filename, span, properties.LargeThumbSize);
                 var small = ffmpeg.TakeScreenshot(filename, span, properties.SmallThumbSize);
                 Thumbnail thumb = new Thumbnail()
@@ -46,25 +50,19 @@ namespace SOTVVideoUploader
             thumb.Large = ffmpeg.TakeScreenshot(filename, thumb.Position, properties.LargeThumbSize);
         }
 
-        #endregion
-
-
-
-        #region IThumbnailGenerator Members
-
-
         public Thumbnail GetThumbnailAt(string filename, TimeSpan position, IThumbnailPropertiesProvider properties)
         {
             FFMpeg ffmpeg = new FFMpeg();
 
 
             var res = new Thumbnail();
-            res.Small  = ffmpeg.TakeScreenshot(filename, position, properties.SmallThumbSize);
+            res.Small = ffmpeg.TakeScreenshot(filename, position, properties.SmallThumbSize);
             res.Position = position;
             res.IsChecked = true;
             return res;
 
         }
+
 
         #endregion
     }
