@@ -17,6 +17,7 @@ namespace SOTVVideoUploader
     {
         private string _bucketName;
         private AmazonS3Client _client;
+        private int _timeout = 3600000;
 
         /// <summary>
         /// Создает новый экземпляр класса S3Uploader
@@ -30,10 +31,16 @@ namespace SOTVVideoUploader
                 CommunicationProtocol = Amazon.S3.Model.Protocol.HTTPS,
                 BufferSize = 1024*1024,
             };
-            var _credentials = new BasicAWSCredentials("AKIAJN2R2DUUOVRZR66Q", "9r9l4q5xW7vZhfs+BT8ky1RpQYj8lRZr9k9ha1VY");
+            var _credentials = new BasicAWSCredentials(credntialsProvider.AccessKey, credntialsProvider.SecretKey);
             _bucketName = ConfigurationManager.AppSettings["bucketName"];
             _client = new AmazonS3Client(_credentials,config);
-            
+
+            var strTimeout = ConfigurationManager.AppSettings["amazonRequestTimeout"];
+            int minutesTimeout;
+            if (int.TryParse(strTimeout, out minutesTimeout))
+            {
+                _timeout = minutesTimeout * 60 * 1000;
+            }
         }
 
         /// <summary>
@@ -50,7 +57,7 @@ namespace SOTVVideoUploader
                     BucketName = _bucketName,
                     Key = path,
                     InputStream = data,
-                    Timeout = 3600000
+                    Timeout = _timeout,
                 };
                 request.AddHeader("x-amz-acl", "public-read");
                 _client.PutObject(request);
@@ -79,7 +86,7 @@ namespace SOTVVideoUploader
                     BucketName = _bucketName,
                     Key = path,
                     FilePath = filename,
-                    Timeout = 3600000
+                    Timeout = _timeout,
                 };
                 request.AddHeader("x-amz-acl", "public-read");
                 _client.PutObject(request);

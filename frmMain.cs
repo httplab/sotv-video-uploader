@@ -265,9 +265,27 @@ namespace SOTVVideoUploader
 
         private void GenerateThumbs()
         {
-            
             LongOperationProcessor.PerformLongOperation(GenerateThumbsOperation, "Создание скриншотов");
-            _thumbs =  _thumbs.Where(t=>t.IsChecked).Union(_newThumbs).ToList();
+
+            if (_thumbs == null)
+            {
+                if (_newThumbs == null)
+                {
+                    _thumbs = new List<Thumbnail>();
+                }
+                else
+                {
+                    _thumbs = _newThumbs.ToList();
+                }
+            }
+            else
+            {
+                if (_newThumbs != null)
+                {
+                    _thumbs = _thumbs.Where(t => t.IsChecked).Union(_newThumbs).ToList();
+                }
+            }
+
             UpdateThumbsPanel();
         }
 
