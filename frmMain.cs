@@ -80,6 +80,7 @@ namespace SOTVVideoUploader
             lblCategories.Enabled = _fileLoaded;
             lblUploadName.Enabled = _fileLoaded;
             txtUploadName.Enabled = _fileLoaded;
+            
             UpdateThumbsPanel();
         }
 
@@ -267,6 +268,56 @@ namespace SOTVVideoUploader
           
         }
 
+
+        private object UploadThumbsOperation(params object[] args)
+        {
+            IPathGenerator _generator = new PathGenerator();
+            var fileName = Path.GetFileName(_filename);
+            if (!String.IsNullOrWhiteSpace(txtUploadName.Text))
+            {
+                fileName = txtUploadName.Text;
+            }
+
+
+            long quality = 80;
+
+            if (!long.TryParse(ConfigurationManager.AppSettings["jpegQuality"], out quality))
+            {
+                quality = 80;
+            }
+
+
+            var encoder = Encoder.Quality;
+            var encParams = new EncoderParameters(1);
+            var encParam = new EncoderParameter(encoder, quality);
+            encParams.Param[0] = encParam;
+            var jpegEncoder = GetEncoder(ImageFormat.Jpeg);
+
+            var pathInBucket = _generator.GetPath(args[0] as ICategory, fileName);
+            if (_thumbs.Any(t => t.IsChecked))
+            {
+                var img = ThumbnailAggregator.Join(_thumbs.Where(t => t.IsChecked));
+                var stream = new MemoryStream();
+                img.Save(stream, jpegEncoder, encParams);
+
+                var smallThumbsFilename = fileName + ".small.jpg";
+
+                _uploader.Upload(stream, _generator.GetPath(args[0] as ICategory, smallThumbsFilename));
+            }
+
+            if (_mainThumb != null)
+            {
+                var stream = new MemoryStream();
+                var mainThumbFilename = fileName + ".main.jpg";
+                _mainThumb.Large.Save(stream, jpegEncoder, encParams);
+                _uploader.Upload(stream, _generator.GetPath(args[0] as ICategory, mainThumbFilename));
+            }
+
+            return new object() ;
+
+
+        }
+
         private void btnGenerateThumbnails_Click(object sender, EventArgs e)
         {
             GenerateThumbs();
@@ -398,6 +449,8 @@ namespace SOTVVideoUploader
 
             flThumbs.ResumeLayout();
             flThumbs.PerformLayout();
+            tsmiUploadThumbnails.Enabled = _fileLoaded && _thumbs.Any(t => t.IsChecked);
+
             UpdateThumbsStatus();
         }
 
@@ -494,5 +547,34 @@ namespace SOTVVideoUploader
         {
 
         }
+
+        private void tsmiUploadThumbnails_Click(object sender, EventArgs e)
+        {
+            UploadThumbs();
+        }
+
+        private void UploadThumbs()
+        {
+            object res;
+            Exception ex;
+            bool cancel;
+
+            frmLongOperation.PerformAsync<object>(UploadThumbsOperation, "Загрузка файлов на сервер", out res, out cancel, out ex, SelectedCategory);
+
+            if (cancel)
+            {
+                MessageBox.Show("Операция прервана пользователем.", "Загрузка файлов на сервер", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (ex != null)
+            {
+                MessageBox.Show("При загрузке файлов на сервер произошла ошибка.\r\n" + ex.Message, "Загрузка файлов на сервер", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            MessageBox.Show("Загрузка файлов прошла успешно.", "Загрузка файлов на сервер", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
     }
 }

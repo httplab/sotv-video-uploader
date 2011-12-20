@@ -32,17 +32,28 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiFileOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiQuit = new System.Windows.Forms.ToolStripMenuItem();
             this.инструментыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiGenerateThumbs = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiUpload = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiUploadThumbnails = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiAppSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblThumbsCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.btnFileOpen = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnGenerateThumbnails = new System.Windows.Forms.ToolStripButton();
+            this.btnUpload = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnSettings = new System.Windows.Forms.ToolStripButton();
             this.ofdOpenMovie = new System.Windows.Forms.OpenFileDialog();
             this.cmsThumbnails = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.удалитьНеотмеченныеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.очиститьВсеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
@@ -51,26 +62,16 @@
             this.cmbCategories = new System.Windows.Forms.ComboBox();
             this.lblUploadName = new System.Windows.Forms.Label();
             this.lblCategories = new System.Windows.Forms.Label();
+            this.btnCaptureNow = new System.Windows.Forms.Button();
             this.txtUploadName = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.flThumbs = new System.Windows.Forms.FlowLayoutPanel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.pbMainThumb = new System.Windows.Forms.PictureBox();
             this.lblMainTime = new System.Windows.Forms.Label();
             this.lblFilename = new System.Windows.Forms.Label();
-            this.btnCaptureNow = new System.Windows.Forms.Button();
-            this.удалитьНеотмеченныеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.очиститьВсеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pbMainThumb = new System.Windows.Forms.PictureBox();
-            this.btnFileOpen = new System.Windows.Forms.ToolStripButton();
-            this.btnGenerateThumbnails = new System.Windows.Forms.ToolStripButton();
-            this.btnUpload = new System.Windows.Forms.ToolStripButton();
-            this.btnSettings = new System.Windows.Forms.ToolStripButton();
-            this.tsmiFileOpen = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiGenerateThumbs = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiUpload = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiAppSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -112,6 +113,16 @@
             this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.файлToolStripMenuItem.Text = "Файл";
             // 
+            // tsmiFileOpen
+            // 
+            this.tsmiFileOpen.Image = global::SOTVVideoUploader.Properties.Resources.OpenFile;
+            this.tsmiFileOpen.ImageTransparentColor = System.Drawing.Color.Fuchsia;
+            this.tsmiFileOpen.Name = "tsmiFileOpen";
+            this.tsmiFileOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.tsmiFileOpen.Size = new System.Drawing.Size(164, 22);
+            this.tsmiFileOpen.Text = "Открыть";
+            this.tsmiFileOpen.Click += new System.EventHandler(this.открытьToolStripMenuItem_Click);
+            // 
             // tsmiQuit
             // 
             this.tsmiQuit.Name = "tsmiQuit";
@@ -124,10 +135,40 @@
             // 
             this.инструментыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiGenerateThumbs,
-            this.tsmiUpload});
+            this.tsmiUpload,
+            this.tsmiUploadThumbnails});
             this.инструментыToolStripMenuItem.Name = "инструментыToolStripMenuItem";
             this.инструментыToolStripMenuItem.Size = new System.Drawing.Size(95, 20);
             this.инструментыToolStripMenuItem.Text = "Инструменты";
+            // 
+            // tsmiGenerateThumbs
+            // 
+            this.tsmiGenerateThumbs.Enabled = false;
+            this.tsmiGenerateThumbs.Image = global::SOTVVideoUploader.Properties.Resources.GenVideoDoc_16x16_72;
+            this.tsmiGenerateThumbs.Name = "tsmiGenerateThumbs";
+            this.tsmiGenerateThumbs.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
+            this.tsmiGenerateThumbs.Size = new System.Drawing.Size(266, 22);
+            this.tsmiGenerateThumbs.Text = "Сгенерировать скриншоты";
+            this.tsmiGenerateThumbs.Click += new System.EventHandler(this.tsmiGenerateThumbs_Click);
+            // 
+            // tsmiUpload
+            // 
+            this.tsmiUpload.Enabled = false;
+            this.tsmiUpload.Image = global::SOTVVideoUploader.Properties.Resources.Webcontrol_Fileupload;
+            this.tsmiUpload.ImageTransparentColor = System.Drawing.Color.Fuchsia;
+            this.tsmiUpload.Name = "tsmiUpload";
+            this.tsmiUpload.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
+            this.tsmiUpload.Size = new System.Drawing.Size(266, 22);
+            this.tsmiUpload.Text = "Загрузить на сервер";
+            this.tsmiUpload.Click += new System.EventHandler(this.tsmiUpload_Click);
+            // 
+            // tsmiUploadThumbnails
+            // 
+            this.tsmiUploadThumbnails.Enabled = false;
+            this.tsmiUploadThumbnails.Name = "tsmiUploadThumbnails";
+            this.tsmiUploadThumbnails.Size = new System.Drawing.Size(266, 22);
+            this.tsmiUploadThumbnails.Text = "Загрузить скриншоты на сервер";
+            this.tsmiUploadThumbnails.Click += new System.EventHandler(this.tsmiUploadThumbnails_Click);
             // 
             // настройкиToolStripMenuItem
             // 
@@ -136,6 +177,14 @@
             this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
             this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
             this.настройкиToolStripMenuItem.Text = "Настройки";
+            // 
+            // tsmiAppSettings
+            // 
+            this.tsmiAppSettings.Image = global::SOTVVideoUploader.Properties.Resources.settings_16;
+            this.tsmiAppSettings.Name = "tsmiAppSettings";
+            this.tsmiAppSettings.Size = new System.Drawing.Size(207, 22);
+            this.tsmiAppSettings.Text = "Настройки приложения";
+            this.tsmiAppSettings.Click += new System.EventHandler(this.tsmiAppSettings_Click);
             // 
             // справкаToolStripMenuItem
             // 
@@ -176,15 +225,57 @@
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
             // 
+            // btnFileOpen
+            // 
+            this.btnFileOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnFileOpen.Image = global::SOTVVideoUploader.Properties.Resources.OpenFile;
+            this.btnFileOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnFileOpen.Name = "btnFileOpen";
+            this.btnFileOpen.Size = new System.Drawing.Size(23, 22);
+            this.btnFileOpen.Text = "Открыть файл";
+            this.btnFileOpen.Click += new System.EventHandler(this.btnFileOpen_Click);
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
+            // btnGenerateThumbnails
+            // 
+            this.btnGenerateThumbnails.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnGenerateThumbnails.Enabled = false;
+            this.btnGenerateThumbnails.Image = global::SOTVVideoUploader.Properties.Resources.GenVideoDoc_16x16_72;
+            this.btnGenerateThumbnails.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnGenerateThumbnails.Name = "btnGenerateThumbnails";
+            this.btnGenerateThumbnails.Size = new System.Drawing.Size(23, 22);
+            this.btnGenerateThumbnails.Text = "Сгенерировать скриншоты";
+            this.btnGenerateThumbnails.Click += new System.EventHandler(this.btnGenerateThumbnails_Click);
+            // 
+            // btnUpload
+            // 
+            this.btnUpload.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnUpload.Enabled = false;
+            this.btnUpload.Image = global::SOTVVideoUploader.Properties.Resources.Webcontrol_Fileupload;
+            this.btnUpload.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnUpload.Name = "btnUpload";
+            this.btnUpload.Size = new System.Drawing.Size(23, 22);
+            this.btnUpload.Text = "Загрузить на сервер";
+            this.btnUpload.Click += new System.EventHandler(this.btnUpload_Click);
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnSettings
+            // 
+            this.btnSettings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnSettings.Image = global::SOTVVideoUploader.Properties.Resources.settings_16;
+            this.btnSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Size = new System.Drawing.Size(23, 22);
+            this.btnSettings.Text = "Настройки";
+            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
             // 
             // ofdOpenMovie
             // 
@@ -198,6 +289,23 @@
             this.очиститьВсеToolStripMenuItem});
             this.cmsThumbnails.Name = "cmsThumbnails";
             this.cmsThumbnails.Size = new System.Drawing.Size(204, 48);
+            // 
+            // удалитьНеотмеченныеToolStripMenuItem
+            // 
+            this.удалитьНеотмеченныеToolStripMenuItem.Image = global::SOTVVideoUploader.Properties.Resources.Delete;
+            this.удалитьНеотмеченныеToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.удалитьНеотмеченныеToolStripMenuItem.Name = "удалитьНеотмеченныеToolStripMenuItem";
+            this.удалитьНеотмеченныеToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.удалитьНеотмеченныеToolStripMenuItem.Text = "Удалить неотмеченные";
+            this.удалитьНеотмеченныеToolStripMenuItem.Click += new System.EventHandler(this.удалитьНеотмеченныеToolStripMenuItem_Click);
+            // 
+            // очиститьВсеToolStripMenuItem
+            // 
+            this.очиститьВсеToolStripMenuItem.Image = global::SOTVVideoUploader.Properties.Resources.XSDSchema_ClearWorkspaceCmd;
+            this.очиститьВсеToolStripMenuItem.Name = "очиститьВсеToolStripMenuItem";
+            this.очиститьВсеToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.очиститьВсеToolStripMenuItem.Text = "Очистить все";
+            this.очиститьВсеToolStripMenuItem.Click += new System.EventHandler(this.очиститьВсеToolStripMenuItem_Click);
             // 
             // tableLayoutPanel3
             // 
@@ -313,6 +421,20 @@
             this.lblCategories.TabIndex = 14;
             this.lblCategories.Text = "Категория";
             // 
+            // btnCaptureNow
+            // 
+            this.btnCaptureNow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCaptureNow.Image = global::SOTVVideoUploader.Properties.Resources.GenVideoDoc_16x16_72;
+            this.btnCaptureNow.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCaptureNow.Location = new System.Drawing.Point(276, 8);
+            this.btnCaptureNow.Name = "btnCaptureNow";
+            this.btnCaptureNow.Size = new System.Drawing.Size(99, 38);
+            this.btnCaptureNow.TabIndex = 15;
+            this.btnCaptureNow.Text = "Сделать скриншот";
+            this.btnCaptureNow.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnCaptureNow.UseVisualStyleBackColor = true;
+            this.btnCaptureNow.Click += new System.EventHandler(this.btnCaptureNow_Click);
+            // 
             // txtUploadName
             // 
             this.txtUploadName.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -390,6 +512,16 @@
             this.tableLayoutPanel2.Size = new System.Drawing.Size(401, 115);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
+            // pbMainThumb
+            // 
+            this.pbMainThumb.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pbMainThumb.Location = new System.Drawing.Point(3, 3);
+            this.pbMainThumb.Name = "pbMainThumb";
+            this.pbMainThumb.Size = new System.Drawing.Size(395, 84);
+            this.pbMainThumb.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbMainThumb.TabIndex = 0;
+            this.pbMainThumb.TabStop = false;
+            // 
             // lblMainTime
             // 
             this.lblMainTime.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -408,128 +540,6 @@
             this.lblFilename.Name = "lblFilename";
             this.lblFilename.Size = new System.Drawing.Size(0, 13);
             this.lblFilename.TabIndex = 1;
-            // 
-            // btnCaptureNow
-            // 
-            this.btnCaptureNow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCaptureNow.Image = global::SOTVVideoUploader.Properties.Resources.GenVideoDoc_16x16_72;
-            this.btnCaptureNow.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCaptureNow.Location = new System.Drawing.Point(276, 8);
-            this.btnCaptureNow.Name = "btnCaptureNow";
-            this.btnCaptureNow.Size = new System.Drawing.Size(99, 38);
-            this.btnCaptureNow.TabIndex = 15;
-            this.btnCaptureNow.Text = "Сделать скриншот";
-            this.btnCaptureNow.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnCaptureNow.UseVisualStyleBackColor = true;
-            this.btnCaptureNow.Click += new System.EventHandler(this.btnCaptureNow_Click);
-            // 
-            // удалитьНеотмеченныеToolStripMenuItem
-            // 
-            this.удалитьНеотмеченныеToolStripMenuItem.Image = global::SOTVVideoUploader.Properties.Resources.Delete;
-            this.удалитьНеотмеченныеToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.удалитьНеотмеченныеToolStripMenuItem.Name = "удалитьНеотмеченныеToolStripMenuItem";
-            this.удалитьНеотмеченныеToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
-            this.удалитьНеотмеченныеToolStripMenuItem.Text = "Удалить неотмеченные";
-            this.удалитьНеотмеченныеToolStripMenuItem.Click += new System.EventHandler(this.удалитьНеотмеченныеToolStripMenuItem_Click);
-            // 
-            // очиститьВсеToolStripMenuItem
-            // 
-            this.очиститьВсеToolStripMenuItem.Image = global::SOTVVideoUploader.Properties.Resources.XSDSchema_ClearWorkspaceCmd;
-            this.очиститьВсеToolStripMenuItem.Name = "очиститьВсеToolStripMenuItem";
-            this.очиститьВсеToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
-            this.очиститьВсеToolStripMenuItem.Text = "Очистить все";
-            this.очиститьВсеToolStripMenuItem.Click += new System.EventHandler(this.очиститьВсеToolStripMenuItem_Click);
-            // 
-            // pbMainThumb
-            // 
-            this.pbMainThumb.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pbMainThumb.Location = new System.Drawing.Point(3, 3);
-            this.pbMainThumb.Name = "pbMainThumb";
-            this.pbMainThumb.Size = new System.Drawing.Size(395, 84);
-            this.pbMainThumb.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbMainThumb.TabIndex = 0;
-            this.pbMainThumb.TabStop = false;
-            // 
-            // btnFileOpen
-            // 
-            this.btnFileOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnFileOpen.Image = global::SOTVVideoUploader.Properties.Resources.OpenFile;
-            this.btnFileOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnFileOpen.Name = "btnFileOpen";
-            this.btnFileOpen.Size = new System.Drawing.Size(23, 22);
-            this.btnFileOpen.Text = "Открыть файл";
-            this.btnFileOpen.Click += new System.EventHandler(this.btnFileOpen_Click);
-            // 
-            // btnGenerateThumbnails
-            // 
-            this.btnGenerateThumbnails.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnGenerateThumbnails.Enabled = false;
-            this.btnGenerateThumbnails.Image = global::SOTVVideoUploader.Properties.Resources.GenVideoDoc_16x16_72;
-            this.btnGenerateThumbnails.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnGenerateThumbnails.Name = "btnGenerateThumbnails";
-            this.btnGenerateThumbnails.Size = new System.Drawing.Size(23, 22);
-            this.btnGenerateThumbnails.Text = "Сгенерировать скриншоты";
-            this.btnGenerateThumbnails.Click += new System.EventHandler(this.btnGenerateThumbnails_Click);
-            // 
-            // btnUpload
-            // 
-            this.btnUpload.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnUpload.Enabled = false;
-            this.btnUpload.Image = global::SOTVVideoUploader.Properties.Resources.Webcontrol_Fileupload;
-            this.btnUpload.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnUpload.Name = "btnUpload";
-            this.btnUpload.Size = new System.Drawing.Size(23, 22);
-            this.btnUpload.Text = "Загрузить на сервер";
-            this.btnUpload.Click += new System.EventHandler(this.btnUpload_Click);
-            // 
-            // btnSettings
-            // 
-            this.btnSettings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnSettings.Image = global::SOTVVideoUploader.Properties.Resources.settings_16;
-            this.btnSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnSettings.Name = "btnSettings";
-            this.btnSettings.Size = new System.Drawing.Size(23, 22);
-            this.btnSettings.Text = "Настройки";
-            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
-            // 
-            // tsmiFileOpen
-            // 
-            this.tsmiFileOpen.Image = global::SOTVVideoUploader.Properties.Resources.OpenFile;
-            this.tsmiFileOpen.ImageTransparentColor = System.Drawing.Color.Fuchsia;
-            this.tsmiFileOpen.Name = "tsmiFileOpen";
-            this.tsmiFileOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.tsmiFileOpen.Size = new System.Drawing.Size(164, 22);
-            this.tsmiFileOpen.Text = "Открыть";
-            this.tsmiFileOpen.Click += new System.EventHandler(this.открытьToolStripMenuItem_Click);
-            // 
-            // tsmiGenerateThumbs
-            // 
-            this.tsmiGenerateThumbs.Enabled = false;
-            this.tsmiGenerateThumbs.Image = global::SOTVVideoUploader.Properties.Resources.GenVideoDoc_16x16_72;
-            this.tsmiGenerateThumbs.Name = "tsmiGenerateThumbs";
-            this.tsmiGenerateThumbs.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
-            this.tsmiGenerateThumbs.Size = new System.Drawing.Size(266, 22);
-            this.tsmiGenerateThumbs.Text = "Сгенерировать скриншоты";
-            this.tsmiGenerateThumbs.Click += new System.EventHandler(this.tsmiGenerateThumbs_Click);
-            // 
-            // tsmiUpload
-            // 
-            this.tsmiUpload.Enabled = false;
-            this.tsmiUpload.Image = global::SOTVVideoUploader.Properties.Resources.Webcontrol_Fileupload;
-            this.tsmiUpload.ImageTransparentColor = System.Drawing.Color.Fuchsia;
-            this.tsmiUpload.Name = "tsmiUpload";
-            this.tsmiUpload.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
-            this.tsmiUpload.Size = new System.Drawing.Size(266, 22);
-            this.tsmiUpload.Text = "Загрузить на сервер";
-            this.tsmiUpload.Click += new System.EventHandler(this.tsmiUpload_Click);
-            // 
-            // tsmiAppSettings
-            // 
-            this.tsmiAppSettings.Image = global::SOTVVideoUploader.Properties.Resources.settings_16;
-            this.tsmiAppSettings.Name = "tsmiAppSettings";
-            this.tsmiAppSettings.Size = new System.Drawing.Size(207, 22);
-            this.tsmiAppSettings.Text = "Настройки приложения";
-            this.tsmiAppSettings.Click += new System.EventHandler(this.tsmiAppSettings_Click);
             // 
             // frmMain
             // 
@@ -619,6 +629,7 @@
         private System.Windows.Forms.PictureBox pbMainThumb;
         private System.Windows.Forms.Label lblMainTime;
         private System.Windows.Forms.Label lblFilename;
+        private System.Windows.Forms.ToolStripMenuItem tsmiUploadThumbnails;
     }
 }
 
