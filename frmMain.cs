@@ -11,11 +11,13 @@ using System.Drawing.Imaging;
 using Encoder = System.Drawing.Imaging.Encoder;
 using System.Configuration;
 using System.Threading;
+using WMPLib;
 
 namespace SOTVVideoUploader
 {
     public partial class frmMain : Form
     {
+        private Thumbnail _selectedThumb;
         private const string _title = "SOTVVideoUploader";
         private string _filename;
         private bool _fileLoaded = false;
@@ -25,6 +27,8 @@ namespace SOTVVideoUploader
         private IEnumerable<Thumbnail> _newThumbs;
         private List<Thumbnail> _thumbs=new List<Thumbnail>();
         private Thumbnail _mainThumb;
+        private bool _tvClicked = false;
+        private Point _tvClickLocation;
        
         public frmMain()
         {
@@ -61,6 +65,9 @@ namespace SOTVVideoUploader
             _thumbs = null;
             _mainThumb = null;
             _newThumbs = null;
+
+            cmbCategories.SelectedItem = null;
+
             UpdateReadyState();
         }
 
@@ -76,6 +83,8 @@ namespace SOTVVideoUploader
             btnGenerateThumbnails.Enabled = tsmiGenerateThumbs.Enabled = _fileLoaded;
             btnUpload.Enabled = tsmiUpload.Enabled = _serverAccessible && _fileLoaded;
             btnCaptureNow.Enabled = _fileLoaded;
+            btnOneFrameBack.Enabled = _fileLoaded;
+            btnOneFrameForward.Enabled = _fileLoaded;
             cmbCategories.Enabled = _fileLoaded;
             lblCategories.Enabled = _fileLoaded;
             lblUploadName.Enabled = _fileLoaded;
@@ -90,6 +99,7 @@ namespace SOTVVideoUploader
             {
                 IEnumerable<ICategory> categories = new CategoryProvider();
                 cmbCategories.DataSource = categories.ToList();
+                cmbCategories.SelectedItem = null;
                 _serverAccessible = true;
             }
             catch
@@ -154,6 +164,15 @@ namespace SOTVVideoUploader
 
         public void Upload()
         {
+            if (SelectedCategory == null)
+            {
+                MessageBox.Show("Не выбрана категория.","Загрузка файлов на сервер", MessageBoxButtons.OK, MessageBoxIcon.Warning );
+                cmbCategories.Focus();
+                return;
+            }
+
+
+
             if (_thumbs == null || !_thumbs.Any(t=>t.IsChecked))
             {
                 if (MessageBox.Show("Не выбрано ни одного скриншота. Продолжить загрузку на сервер?","Загрузка на сервер", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
@@ -161,6 +180,8 @@ namespace SOTVVideoUploader
                     return;
                 }    
             }
+
+
 
             mplayer.URL = "";
             mplayer.close();
@@ -411,13 +432,10 @@ namespace SOTVVideoUploader
 
         private void btnCaptureNow_Click(object sender, EventArgs e)
         {
-            
-
-
-            double cpos = mplayer.Ctlcontrols.currentPosition;
+            double cpos =  ((IWMPControls2)mplayer.Ctlcontrols).currentPosition;
+            //double cpos = mplayer.Ctlcontrols.currentPosition;
             int milliseconds = (int) Math.Round((cpos) * 1000);
             var currentPosition = new TimeSpan(0, 0, 0, 0, milliseconds);
-
             var thumb = _thumbGenerator.GetThumbnailAt(_filename, currentPosition, new ThumbsSettings());
             _thumbs.Add(thumb);
             UpdateThumbsPanel();
@@ -443,7 +461,11 @@ namespace SOTVVideoUploader
                 tv.Height = 110;
                 tv.CheckedChanged += new EventHandler(tv_CheckedChanged);
                 tv.MouseDown += new MouseEventHandler(tv_MouseDown);
+                tv.MouseMove += new MouseEventHandler(tv_MouseMove);
+                tv.MouseUp += new MouseEventHandler(tv_MouseUp);
+                tv.MouseDoubleClick += new MouseEventHandler(tv_MouseDoubleClick);
                 flThumbs.Controls.Add(tv);
+                tv.ContextMenuStrip = cmsThumbnail;
                 
             }
 
@@ -454,11 +476,44 @@ namespace SOTVVideoUploader
             UpdateThumbsStatus();
         }
 
+        void tv_MouseUp(object sender, MouseEventArgs e)
+        {
+            _tvClicked = false;
+        }
+
+        void tv_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            var tv = sender as ThumbnailViewer;
+            _selectedThumb = tv.Thumbnail;
+            PreviewThumb();
+        }
+
+        void tv_MouseMove(object sender, MouseEventArgs e)
+        {
+
+
+            if (_tvClicked)
+            {
+                if (Math.Abs(e.Location.X - _tvClickLocation.X) > 6 || Math.Abs(e.Location.Y - _tvClickLocation.Y) > 6)
+                {
+                    _tvClicked = false;
+                    var tv = sender as ThumbnailViewer;
+                    tv.DoDragDrop(tv.Thumbnail, DragDropEffects.Link);
+                }
+            }
+        }
+
+       
+
         void tv_MouseDown(object sender, MouseEventArgs e)
         {
             var tv = sender as ThumbnailViewer;
+            _selectedThumb = tv.Thumbnail;
 
-            tv.DoDragDrop(tv.Thumbnail, DragDropEffects.Link);
+            _tvClicked = true;
+            _tvClickLocation = e.Location;
+
+            
         }
 
         void tv_CheckedChanged(object sender, EventArgs e)
@@ -576,5 +631,67 @@ namespace SOTVVideoUploader
             MessageBox.Show("Загрузка файлов прошла успешно.", "Загрузка файлов на сервер", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Properties.Settings.Default.Save();
+        }
+
+        private void tsmiPreview_Click(object sender, EventArgs e)
+        {
+            PreviewThumb();
+        }
+
+        private void PreviewThumb()
+        {
+            if (_selectedThumb == null)
+            {
+                return;
+            }
+
+            if (_selectedThumb.Large == null)
+            {
+                MakeMainThumb(_selectedThumb);
+            }
+
+            var frm = new frmThumbnailPreview();
+            frm.Thumbnail = _selectedThumb;
+            frm.ShowDialog();
+        }
+
+        private void tsmiMakeMain_Click(object sender, EventArgs e)
+        {
+            if (_selectedThumb == null)
+            {
+                return;
+            }
+
+            MainThumb = _selectedThumb;
+        }
+
+        private void tsmiDeleteThumb_Click(object sender, EventArgs e)
+        {
+            if (_selectedThumb == null)
+                return;
+
+            _thumbs.Remove(_selectedThumb);
+            UpdateThumbsPanel();
+        }
+
+        private void btnOneFrameForward_Click(object sender, EventArgs e)
+        {
+            MplayerStep(1);
+        }
+
+        private void btnOneFrameBack_Click(object sender, EventArgs e)
+        {
+            MplayerStep(-1);
+        }
+
+        private void MplayerStep(int step)
+        {
+            ((IWMPControls2)mplayer.Ctlcontrols).pause();
+            
+            ((IWMPControls2)mplayer.Ctlcontrols).step(step);
+        }
     }
 }

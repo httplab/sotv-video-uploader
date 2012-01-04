@@ -44,7 +44,10 @@
             this.pbMain.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbMain.TabIndex = 0;
             this.pbMain.TabStop = false;
+            this.pbMain.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pbMain_MouseDoubleClick);
             this.pbMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbMain_MouseDown);
+            this.pbMain.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbMain_MouseMove);
+            this.pbMain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbMain_MouseUp);
             // 
             // tableLayoutPanel1
             // 
@@ -61,6 +64,10 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(318, 200);
             this.tableLayoutPanel1.TabIndex = 1;
+            this.tableLayoutPanel1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pbMain_MouseDoubleClick);
+            this.tableLayoutPanel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tableLayoutPanel1_MouseDown);
+            this.tableLayoutPanel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbMain_MouseMove);
+            this.tableLayoutPanel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbMain_MouseUp);
             // 
             // chbMain
             // 

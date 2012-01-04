@@ -3,16 +3,19 @@
   <Profiles />
   <Settings>
     <Setting Name="ThumbsNum" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">15</Value>
+      <Value Profile="(Default)">12</Value>
     </Setting>
     <Setting Name="ThumbsCaptureStart" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="LargeThumbSize" Type="System.Drawing.Size" Scope="User">
-      <Value Profile="(Default)">560, 315</Value>
+      <Value Profile="(Default)">560, 420</Value>
     </Setting>
     <Setting Name="SmallThumbSize" Type="System.Drawing.Size" Scope="User">
-      <Value Profile="(Default)">160, 90</Value>
+      <Value Profile="(Default)">160, 120</Value>
+    </Setting>
+    <Setting Name="frmLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">100, 100</Value>
     </Setting>
   </Settings>
 </SettingsFile>

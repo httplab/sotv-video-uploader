@@ -60,9 +60,30 @@ namespace SOTVVideoUploader.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Back {
+            get {
+                object obj = ResourceManager.GetObject("Back", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap base_checkmark_32 {
+            get {
+                object obj = ResourceManager.GetObject("base_checkmark_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Delete {
             get {
                 object obj = ResourceManager.GetObject("Delete", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap forward {
+            get {
+                object obj = ResourceManager.GetObject("forward", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -77,6 +98,27 @@ namespace SOTVVideoUploader.Properties {
         internal static System.Drawing.Bitmap OpenFile {
             get {
                 object obj = ResourceManager.GetObject("OpenFile", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap openHS {
+            get {
+                object obj = ResourceManager.GetObject("openHS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap PrintPreview {
+            get {
+                object obj = ResourceManager.GetObject("PrintPreview", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap PrintPreviewHS {
+            get {
+                object obj = ResourceManager.GetObject("PrintPreviewHS", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -25,7 +25,7 @@ namespace SOTVVideoUploader.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        [global::System.Configuration.DefaultSettingValueAttribute("12")]
         public int ThumbsNum {
             get {
                 return ((int)(this["ThumbsNum"]));
@@ -49,7 +49,7 @@ namespace SOTVVideoUploader.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("560, 315")]
+        [global::System.Configuration.DefaultSettingValueAttribute("560, 420")]
         public global::System.Drawing.Size LargeThumbSize {
             get {
                 return ((global::System.Drawing.Size)(this["LargeThumbSize"]));
@@ -61,13 +61,25 @@ namespace SOTVVideoUploader.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("160, 90")]
+        [global::System.Configuration.DefaultSettingValueAttribute("160, 120")]
         public global::System.Drawing.Size SmallThumbSize {
             get {
                 return ((global::System.Drawing.Size)(this["SmallThumbSize"]));
             }
             set {
                 this["SmallThumbSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100, 100")]
+        public global::System.Drawing.Point frmLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["frmLocation"]));
+            }
+            set {
+                this["frmLocation"] = value;
             }
         }
     }

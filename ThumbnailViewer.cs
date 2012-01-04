@@ -71,5 +71,25 @@ namespace SOTVVideoUploader
         {
             OnMouseDown(e);
         }
+
+        private void tableLayoutPanel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            OnMouseDown(e);
+        }
+
+        private void pbMain_MouseMove(object sender, MouseEventArgs e)
+        {
+            OnMouseMove(e);
+        }
+
+        private void pbMain_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            OnMouseDoubleClick(e);
+        }
+
+        private void pbMain_MouseUp(object sender, MouseEventArgs e)
+        {
+            OnMouseUp(e);
+        }
     }
 }

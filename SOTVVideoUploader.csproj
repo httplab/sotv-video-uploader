@@ -73,6 +73,12 @@
     <Compile Include="frmSettingsDialog.Designer.cs">
       <DependentUpon>frmSettingsDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmThumbnailPreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmThumbnailPreview.Designer.cs">
+      <DependentUpon>frmThumbnailPreview.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmUploadResult.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -112,6 +118,9 @@
     <EmbeddedResource Include="frmLongOperation.resx">
       <DependentUpon>frmLongOperation.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmThumbnailPreview.resx">
+      <DependentUpon>frmThumbnailPreview.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmUploadResult.resx">
       <DependentUpon>frmUploadResult.cs</DependentUpon>
     </EmbeddedResource>
@@ -143,6 +152,12 @@
     <Content Include="ffmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\base_checkmark_32.png" />
+    <None Include="Resources\PrintPreview.bmp" />
+    <None Include="Resources\PrintPreviewHS.png" />
+    <None Include="Resources\openHS.png" />
+    <None Include="Resources\forward.png" />
+    <None Include="Resources\Back.png" />
     <Content Include="windows_256.ico" />
     <None Include="Resources\XSDSchema_ClearWorkspaceCmd.bmp" />
     <None Include="Resources\Delete.bmp" />
